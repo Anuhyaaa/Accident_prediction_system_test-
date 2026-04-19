@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiCpu, FiAlertTriangle } from 'react-icons/fi';
 import RiskBadge from '../components/RiskBadge';
-import { predictSeverity } from '../api';
-import { mockPrediction } from '../mockData';
+import { predictSeverity, fetchClusters } from '../api';
 
 const WEATHER_OPTIONS = ['Clear', 'Rain', 'Fog', 'Snow', 'Wind', 'Other'];
 const LIGHT_OPTIONS = ['Daylight', 'Darkness - lights lit', 'Darkness - lights unlit', 'Darkness - no lighting'];
@@ -47,10 +46,25 @@ function NumberField({ label, name, value, min, max, onChange }) {
 
 export default function Predict() {
   const [form, setForm] = useState(defaultForm);
-  const [result, setResult] = useState(mockPrediction);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [live, setLive] = useState(false);
+  const [clusterIds, setClusterIds] = useState([]);
+
+  useEffect(() => {
+    fetchClusters()
+      .then(r => {
+        const ids = (r.data?.features || [])
+          .map(f => f.properties?.Cluster_ID)
+          .filter(id => id !== undefined && id !== null)
+          .sort((a, b) => a - b);
+        if (ids.length) {
+          setClusterIds(ids);
+          setForm(prev => ({ ...prev, cluster_id: ids[0] }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +78,6 @@ export default function Predict() {
       const payload = { ...form, cluster_id: +form.cluster_id, hour: +form.hour, day_of_week: +form.day_of_week, is_night: +form.is_night, num_vehicles: +form.num_vehicles };
       const res = await predictSeverity(payload);
       setResult(res.data);
-      setLive(true);
     } catch (err) {
       setError(err.response?.data?.error || 'Prediction failed');
     } finally { setLoading(false); }
@@ -76,7 +89,6 @@ export default function Predict() {
         <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Risk Prediction</h2>
         <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
           Predict accident severity and ARI for specific conditions
-          {!live && result && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ background: '#f59e0b20', color: '#f59e0b' }}>Sample Result</span>}
         </p>
       </div>
 
@@ -85,7 +97,11 @@ export default function Predict() {
         <form onSubmit={handleSubmit} className="lg:col-span-3 rounded-xl border p-6 space-y-5"
           style={{ background: 'var(--clr-surface)', borderColor: 'var(--clr-border)' }}>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <NumberField label="Cluster ID" name="cluster_id" value={form.cluster_id} min={0} max={999} onChange={handleChange} />
+            {clusterIds.length > 0 ? (
+              <SelectField label="Cluster ID" name="cluster_id" value={form.cluster_id} options={clusterIds} onChange={handleChange} />
+            ) : (
+              <NumberField label="Cluster ID" name="cluster_id" value={form.cluster_id} min={0} max={999} onChange={handleChange} />
+            )}
             <NumberField label="Hour (0-23)" name="hour" value={form.hour} min={0} max={23} onChange={handleChange} />
             <NumberField label="Day of Week (0-6)" name="day_of_week" value={form.day_of_week} min={0} max={6} onChange={handleChange} />
             <SelectField label="Night?" name="is_night" value={form.is_night} options={[0, 1]} onChange={handleChange} />

@@ -32,7 +32,7 @@ MYSQL_CONFIG = {
 # ---------------------------------------------------------------------------
 # DBSCAN hyper-parameters  (tuned for Indian geocoded coordinates)
 # ---------------------------------------------------------------------------
-DBSCAN_EPS = float(os.getenv("DBSCAN_EPS", 0.045))       # ~5 km radius
+DBSCAN_EPS = float(os.getenv("DBSCAN_EPS", 0.005))       # ~32 km radius (5/6371 ≈ 0.00079 for 5 km)
 DBSCAN_MIN_SAMPLES = int(os.getenv("DBSCAN_MIN_SAMPLES", 15))
 
 # ---------------------------------------------------------------------------

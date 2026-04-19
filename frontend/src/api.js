@@ -15,5 +15,8 @@ export const uploadCSV = (file) => {
   return api.post('/upload', fd);
 };
 export const runPipeline = () => api.post('/pipeline/run');
+export const fetchUploads = () => api.get('/uploads');
+export const deleteUpload = (id, clearArtifacts = false) =>
+  api.delete(`/uploads/${id}${clearArtifacts ? '?clear_artifacts=true' : ''}`);
 
 export default api;

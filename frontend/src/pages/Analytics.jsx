@@ -6,14 +6,25 @@ import {
 } from 'recharts';
 import ChartCard from '../components/ChartCard';
 import { fetchEda, fetchModelMetrics } from '../api';
-import { mockEda, mockMetrics } from '../mockData';
 
 const COLORS = ['#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#3b82f6', '#ec4899', '#8b5cf6', '#14b8a6'];
 
+// Normalise API array responses → {key: count} objects that toArr() can consume.
+// Mock data already uses the plain-object format so these are no-ops for mock data.
+const NORMALIZERS = {
+  hourly:              (d) => Array.isArray(d) ? Object.fromEntries(d.map(r => [r.hour,           r.count])) : d,
+  weekly:              (d) => Array.isArray(d) ? Object.fromEntries(d.map(r => [r.day,            r.count])) : d,
+  severity:            (d) => Array.isArray(d) ? Object.fromEntries(d.map(r => [r.label,          r.count])) : d,
+  weather:             (d) => Array.isArray(d) ? Object.fromEntries(d.map(r => [r.weather,        r.count])) : d,
+  top_areas:           (d) => Array.isArray(d) ? Object.fromEntries(d.map(r => [r.area,           r.count])) : d,
+  collision_types:     (d) => Array.isArray(d) ? Object.fromEntries(d.map(r => [r.collision_type, r.count])) : d,
+  causes:              (d) => Array.isArray(d) ? Object.fromEntries(d.map(r => [r.cause,          r.count])) : d,
+  severity_by_weather: (d) => d,
+};
+
 export default function Analytics() {
-  const [data, setData] = useState(mockEda);
-  const [metrics, setMetrics] = useState(mockMetrics);
-  const [live, setLive] = useState(false);
+  const [data, setData] = useState({});
+  const [metrics, setMetrics] = useState(null);
 
   useEffect(() => {
     const endpoints = ['hourly', 'weekly', 'severity', 'weather', 'top_areas', 'collision_types', 'causes', 'severity_by_weather'];
@@ -24,12 +35,14 @@ export default function Analytics() {
       const d = {};
       let anyLive = false;
       results.slice(0, endpoints.length).forEach(r => {
-        if (r.status === 'fulfilled') { d[r.value.key] = r.value.data; anyLive = true; }
+        if (r.status === 'fulfilled') {
+          const norm = NORMALIZERS[r.value.key];
+          d[r.value.key] = norm ? norm(r.value.data) : r.value.data;
+        }
       });
-      if (anyLive) setData(prev => ({ ...prev, ...d }));
+      if (Object.keys(d).length) setData(prev => ({ ...prev, ...d }));
       const metricsResult = results[endpoints.length];
       if (metricsResult.status === 'fulfilled') setMetrics(metricsResult.value);
-      if (anyLive) setLive(true);
     });
   }, []);
 
@@ -41,7 +54,6 @@ export default function Analytics() {
         <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Analytics</h2>
         <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
           Exploratory Data Analysis & Model Performance
-          {!live && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ background: '#f59e0b20', color: '#f59e0b' }}>Sample Data</span>}
         </p>
       </div>
 

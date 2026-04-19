@@ -14,13 +14,13 @@ def clusters_to_geojson(cluster_rows: list[dict]) -> dict:
     features = []
     for row in cluster_rows:
         props = {
-            "cluster_id": row["Cluster_ID"],
-            "incident_count": row["Incident_Count"],
-            "ari_score": round(float(row.get("ARI_Score", 0)), 4),
-            "risk_tier": row.get("Risk_Tier", "Unknown"),
-            "pred_severity": round(float(row.get("Pred_Severity", 0)), 4),
-            "env_modifier": row.get("Env_Modifier", None),
-            "radius_eps": float(row.get("Radius_Eps", 0)),
+            "Cluster_ID": row["Cluster_ID"],
+            "Incident_Count": row["Incident_Count"],
+            "ARI_Score": round(float(row.get("ARI_Score", 0)), 4),
+            "Risk_Tier": row.get("Risk_Tier", "Unknown"),
+            "Pred_Severity": round(float(row.get("Pred_Severity", 0)), 4),
+            "Env_Modifier": row.get("Env_Modifier", None),
+            "Radius_Eps": float(row.get("Radius_Eps", 0)),
         }
         point = Point((float(row["Centroid_Lon"]), float(row["Centroid_Lat"])))
         features.append(Feature(geometry=point, properties=props))

@@ -5,15 +5,13 @@ import StatCard from '../components/StatCard';
 import ChartCard from '../components/ChartCard';
 import RiskBadge from '../components/RiskBadge';
 import { fetchClusters, fetchEdaSummary, fetchHealth } from '../api';
-import { mockClusters, mockSummary, mockHealth } from '../mockData';
 
 const PIE_COLORS = ['#22c55e', '#f59e0b', '#f97316', '#ef4444'];
 
 export default function Dashboard() {
-  const [clusters, setClusters] = useState(mockClusters);
-  const [summary, setSummary] = useState(mockSummary);
-  const [health, setHealth] = useState(mockHealth);
-  const [live, setLive] = useState(false);
+  const [clusters, setClusters] = useState(null);
+  const [summary, setSummary] = useState(null);
+  const [health, setHealth] = useState(null);
 
   useEffect(() => {
     Promise.allSettled([
@@ -21,7 +19,7 @@ export default function Dashboard() {
       fetchEdaSummary().then(r => r.data),
       fetchHealth().then(r => r.data),
     ]).then(([c, s, h]) => {
-      if (c.status === 'fulfilled') { setClusters(c.value); setLive(true); }
+      if (c.status === 'fulfilled') setClusters(c.value);
       if (s.status === 'fulfilled') setSummary(s.value);
       if (h.status === 'fulfilled') setHealth(h.value);
     });
@@ -62,7 +60,6 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Dashboard</h2>
           <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
             AI-Based Accident Hotspot Prediction Overview
-            {!live && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ background: '#f59e0b20', color: '#f59e0b' }}>Sample Data</span>}
           </p>
         </div>
         {health && (

@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaf
 import 'leaflet/dist/leaflet.css';
 import RiskBadge from '../components/RiskBadge';
 import { fetchClusters } from '../api';
-import { mockClusters } from '../mockData';
 import { useTheme } from '../ThemeContext';
 
 const tierColor = { Low: '#22c55e', Moderate: '#f59e0b', Severe: '#f97316', Critical: '#ef4444' };
@@ -23,9 +22,8 @@ function FitBounds({ features }) {
 }
 
 export default function MapView() {
-  const [clusters, setClusters] = useState(mockClusters);
+  const [clusters, setClusters] = useState(null);
   const [filter, setFilter] = useState('All');
-  const [live, setLive] = useState(false);
   const { theme } = useTheme();
 
   const tileUrl = theme === 'dark'
@@ -33,7 +31,7 @@ export default function MapView() {
     : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
   useEffect(() => {
-    fetchClusters().then(r => { setClusters(r.data); setLive(true); }).catch(() => {});
+    fetchClusters().then(r => setClusters(r.data)).catch(() => {});
   }, []);
 
   const features = clusters?.features || [];
@@ -46,7 +44,6 @@ export default function MapView() {
           <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Hotspot Map</h2>
           <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
             {filtered.length} clusters displayed
-            {!live && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ background: '#f59e0b20', color: '#f59e0b' }}>Sample Data</span>}
           </p>
         </div>
         <div className="flex gap-2">
@@ -97,8 +94,8 @@ export default function MapView() {
                         <p className="font-semibold">{(p.ARI_Score || 0).toFixed(3)}</p>
                       </div>
                       <div>
-                        <p style={{ color: 'var(--clr-text-muted)' }}>Severity</p>
-                        <p className="font-semibold">{p.Pred_Severity || '—'}</p>
+                        <p style={{ color: 'var(--clr-text-muted)' }}>Avg Severity</p>
+                        <p className="font-semibold">{p.Pred_Severity ? (+p.Pred_Severity).toFixed(2) : '—'}</p>
                       </div>
                       <div>
                         <p style={{ color: 'var(--clr-text-muted)' }}>Environment</p>
