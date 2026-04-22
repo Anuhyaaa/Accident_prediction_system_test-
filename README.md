@@ -20,6 +20,9 @@ A proactive road-safety intelligence platform combining **GIS spatial analysis**
 12. [Configuration](#configuration)
 13. [Project Structure](#project-structure)
 
+
+    https://accident-prediction-system-test.vercel.app/
+
 ---
 
 ## Architecture Overview
