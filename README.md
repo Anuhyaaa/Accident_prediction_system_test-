@@ -22,7 +22,7 @@ A proactive road-safety intelligence platform combining **GIS spatial analysis**
 
 ---
 
-https://accident-prediction-system-test.vercel.app/
+
 
 ---
 
