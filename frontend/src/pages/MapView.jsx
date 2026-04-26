@@ -39,14 +39,14 @@ export default function MapView() {
 
   return (
     <div className="space-y-4 h-full flex flex-col">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Hotspot Map</h2>
           <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
             {filtered.length} clusters displayed
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {['All', ...TIERS].map(t => (
             <button key={t} onClick={() => setFilter(t)}
               className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
@@ -114,7 +114,7 @@ export default function MapView() {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-6 px-4 py-3 rounded-xl border"
+      <div className="flex flex-wrap items-center gap-3 sm:gap-6 px-4 py-3 rounded-xl border"
         style={{ background: 'var(--clr-surface)', borderColor: 'var(--clr-border)' }}>
         <span className="text-xs font-medium" style={{ color: 'var(--clr-text-muted)' }}>Risk Levels:</span>
         {TIERS.map(t => (

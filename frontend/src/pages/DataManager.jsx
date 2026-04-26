@@ -119,12 +119,12 @@ export default function DataManager() {
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <input ref={fileRef} type="file" accept=".csv"
             className="flex-1 text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:cursor-pointer"
             style={{ color: 'var(--clr-text-muted)' }} />
           <button onClick={handleUpload} disabled={uploading}
-            className="px-5 py-2 rounded-lg text-sm font-medium text-white shrink-0"
+            className="sm:shrink-0 px-5 py-2 rounded-lg text-sm font-medium text-white"
             style={{ background: uploading ? 'var(--clr-border)' : 'var(--clr-primary)' }}>
             {uploading ? 'Uploading…' : 'Upload'}
           </button>
@@ -303,7 +303,7 @@ export default function DataManager() {
               return (
                 <div key={entry.id} className="px-6 py-4 space-y-3">
                   {/* Row header */}
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
                       <FiDatabase size={16} style={{ color: 'var(--clr-text-muted)', flexShrink: 0 }} />
                       <div className="min-w-0">
@@ -316,7 +316,7 @@ export default function DataManager() {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex items-center gap-2 shrink-0 flex-wrap">
                       {/* Status badge */}
                       <span className="text-xs font-medium px-2.5 py-1 rounded-full"
                         style={{ background: s.bg, color: s.color }}>

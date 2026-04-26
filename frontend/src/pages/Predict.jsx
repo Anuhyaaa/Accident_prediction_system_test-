@@ -94,9 +94,9 @@ export default function Predict() {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Form */}
-        <form onSubmit={handleSubmit} className="lg:col-span-3 rounded-xl border p-6 space-y-5"
+        <form onSubmit={handleSubmit} className="lg:col-span-3 rounded-xl border p-4 sm:p-6 space-y-5"
           style={{ background: 'var(--clr-surface)', borderColor: 'var(--clr-border)' }}>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {clusterIds.length > 0 ? (
               <SelectField label="Cluster ID" name="cluster_id" value={form.cluster_id} options={clusterIds} onChange={handleChange} />
             ) : (

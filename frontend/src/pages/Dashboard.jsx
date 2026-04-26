@@ -55,7 +55,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Dashboard</h2>
           <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
@@ -63,7 +63,7 @@ export default function Dashboard() {
           </p>
         </div>
         {health && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium self-start sm:self-auto"
             style={{
               background: health.status === 'ok' ? '#22c55e15' : '#ef444415',
               color: health.status === 'ok' ? '#22c55e' : '#ef4444',
