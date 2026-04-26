@@ -79,7 +79,9 @@ export const fetchEdaSummary = () => {
 export const uploadCSV = (file) => {
   const fd = new FormData();
   fd.append('file', file);
-  return api.post('/upload', fd);
+  // Setting Content-Type to undefined lets the browser set multipart/form-data
+  // with the correct boundary, overriding the instance-level application/json header.
+  return api.post('/upload', fd, { headers: { 'Content-Type': undefined } });
 };
 
 export const runPipeline = () => {
