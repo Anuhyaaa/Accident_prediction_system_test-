@@ -15,13 +15,5 @@
         0.7535
       ]
     }
-  },
-  {
-    "id": "da84b6ba-9ac4-4f4a-bf91-4c3936044ee9",
-    "filename": "VehicleRoadAccident2011-2022.csv",
-    "uploaded_at": "2026-04-26T16:00:04Z",
-    "size_bytes": 18485,
-    "status": "uploaded",
-    "pipeline_result": null
   }
 ]

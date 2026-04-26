@@ -17,11 +17,11 @@ const ClusterRow = memo(({ feature, index }) => {
   
   return (
     <tr className="border-t" style={{ borderColor: 'var(--clr-border)' }}>
-      <td className="py-2.5 px-3 font-medium">C-{p.Cluster_ID}</td>
-      <td className="py-2.5 px-3">{p.Incident_Count}</td>
-      <td className="py-2.5 px-3 font-mono">{(p.ARI_Score || 0).toFixed(3)}</td>
-      <td className="py-2.5 px-3"><RiskBadge tier={p.Risk_Tier} /></td>
-      <td className="py-2.5 px-3" style={{ color: 'var(--clr-text-muted)' }}>
+      <td className="py-2.5 px-2 sm:px-3 font-medium whitespace-nowrap">C-{p.Cluster_ID}</td>
+      <td className="py-2.5 px-2 sm:px-3 whitespace-nowrap">{p.Incident_Count}</td>
+      <td className="py-2.5 px-2 sm:px-3 font-mono whitespace-nowrap">{(p.ARI_Score || 0).toFixed(3)}</td>
+      <td className="py-2.5 px-2 sm:px-3 whitespace-nowrap"><RiskBadge tier={p.Risk_Tier} /></td>
+      <td className="py-2.5 px-2 sm:px-3 whitespace-nowrap text-xs sm:text-sm" style={{ color: 'var(--clr-text-muted)' }}>
         {lat?.toFixed(4)}, {lon?.toFixed(4)}
       </td>
     </tr>
@@ -90,11 +90,11 @@ function Dashboard() {
   }, [features]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Dashboard</h2>
-          <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
+          <h2 className="text-lg md:text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Dashboard</h2>
+          <p className="text-xs md:text-sm" style={{ color: 'var(--clr-text-muted)' }}>
             AI-Based Accident Hotspot Prediction Overview
           </p>
         </div>
@@ -112,8 +112,8 @@ function Dashboard() {
         )}
       </div>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Stat cards - responsive grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <StatCard icon={<FiMapPin size={20} />} label="Total Clusters" value={stats.totalClusters}
           sub="DBSCAN identified" color="var(--clr-info)" />
         <StatCard icon={<FiAlertTriangle size={20} />} label="Critical Zones" value={stats.criticalCount}
@@ -124,8 +124,8 @@ function Dashboard() {
           sub="Across all clusters" color="var(--clr-primary)" />
       </div>
 
-      {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      {/* Charts row - responsive grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
         <ChartCard title="Top Clusters by ARI Score" className="lg:col-span-2">
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={topClusters}>
@@ -160,25 +160,27 @@ function Dashboard() {
         </ChartCard>
       </div>
 
-      {/* Cluster table */}
+      {/* Cluster table - responsive with horizontal scroll */}
       <ChartCard title="Cluster Overview">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ color: 'var(--clr-text-muted)' }}>
-                <th className="text-left py-2 px-3 font-medium">Cluster</th>
-                <th className="text-left py-2 px-3 font-medium">Incidents</th>
-                <th className="text-left py-2 px-3 font-medium">ARI Score</th>
-                <th className="text-left py-2 px-3 font-medium">Risk Tier</th>
-                <th className="text-left py-2 px-3 font-medium">Location</th>
-              </tr>
-            </thead>
-            <tbody>
-              {features.slice(0, 10).map((f, i) => (
-                <ClusterRow key={f.properties?.Cluster_ID || i} feature={f} index={i} />
-              ))}
-            </tbody>
-          </table>
+        <div className="overflow-x-auto -mx-2 sm:mx-0">
+          <div className="inline-block min-w-full align-middle">
+            <table className="w-full text-xs sm:text-sm">
+              <thead>
+                <tr style={{ color: 'var(--clr-text-muted)' }}>
+                  <th className="text-left py-2 px-2 sm:px-3 font-medium whitespace-nowrap">Cluster</th>
+                  <th className="text-left py-2 px-2 sm:px-3 font-medium whitespace-nowrap">Incidents</th>
+                  <th className="text-left py-2 px-2 sm:px-3 font-medium whitespace-nowrap">ARI Score</th>
+                  <th className="text-left py-2 px-2 sm:px-3 font-medium whitespace-nowrap">Risk Tier</th>
+                  <th className="text-left py-2 px-2 sm:px-3 font-medium whitespace-nowrap">Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                {features.slice(0, 10).map((f, i) => (
+                  <ClusterRow key={f.properties?.Cluster_ID || i} feature={f} index={i} />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </ChartCard>
     </div>

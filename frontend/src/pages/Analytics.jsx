@@ -69,40 +69,40 @@ function Analytics() {
   const toArr = useCallback((obj) => obj ? Object.entries(obj).map(([name, value]) => ({ name, value })) : [], []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div>
-        <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Analytics</h2>
-        <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
+        <h2 className="text-lg md:text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Analytics</h2>
+        <p className="text-xs md:text-sm" style={{ color: 'var(--clr-text-muted)' }}>
           Exploratory Data Analysis & Model Performance
         </p>
       </div>
 
-      {/* Model metrics */}
+      {/* Model metrics - responsive grid */}
       {metrics && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="rounded-xl p-5 border text-center"
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+          <div className="rounded-xl p-4 md:p-5 border text-center"
             style={{ background: 'var(--clr-surface)', borderColor: 'var(--clr-border)' }}>
             <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--clr-text-muted)' }}>Accuracy</p>
-            <p className="text-3xl font-bold" style={{ color: 'var(--clr-success)' }}>
+            <p className="text-2xl md:text-3xl font-bold" style={{ color: 'var(--clr-success)' }}>
               {(metrics.accuracy * 100).toFixed(1)}%
             </p>
           </div>
-          <div className="rounded-xl p-5 border text-center"
+          <div className="rounded-xl p-4 md:p-5 border text-center"
             style={{ background: 'var(--clr-surface)', borderColor: 'var(--clr-border)' }}>
             <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--clr-text-muted)' }}>Model</p>
-            <p className="text-lg font-bold" style={{ color: 'var(--clr-primary-light)' }}>Random Forest</p>
+            <p className="text-base md:text-lg font-bold" style={{ color: 'var(--clr-primary-light)' }}>Random Forest</p>
             <p className="text-xs" style={{ color: 'var(--clr-text-muted)' }}>200 estimators</p>
           </div>
-          <div className="rounded-xl p-5 border text-center"
+          <div className="rounded-xl p-4 md:p-5 border text-center"
             style={{ background: 'var(--clr-surface)', borderColor: 'var(--clr-border)' }}>
             <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--clr-text-muted)' }}>Train/Test Split</p>
-            <p className="text-3xl font-bold" style={{ color: 'var(--clr-info)' }}>80/20</p>
+            <p className="text-2xl md:text-3xl font-bold" style={{ color: 'var(--clr-info)' }}>80/20</p>
           </div>
         </div>
       )}
 
-      {/* Charts grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {/* Charts grid - responsive */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
         {/* Hourly distribution */}
         {data.hourly && (
           <ChartCard title="Accidents by Hour of Day">
@@ -143,7 +143,7 @@ function Analytics() {
                 <Tooltip contentStyle={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: 8, color: 'var(--clr-text)' }} />
               </PieChart>
             </ResponsiveContainer>
-            <div className="flex flex-wrap gap-3 justify-center mt-2">
+            <div className="flex flex-wrap gap-2 md:gap-3 justify-center mt-2">
               {toArr(data.severity).map((d, i) => (
                 <span key={d.name} className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--clr-text-muted)' }}>
                   <span className="w-2.5 h-2.5 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
@@ -160,7 +160,7 @@ function Analytics() {
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={toArr(data.weather)} layout="vertical">
                 <XAxis type="number" tick={{ fill: 'var(--clr-text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="name" tick={{ fill: 'var(--clr-text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} width={100} />
+                <YAxis type="category" dataKey="name" tick={{ fill: 'var(--clr-text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} width={80} />
                 <Tooltip contentStyle={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: 8, color: 'var(--clr-text)' }} />
                 <Bar dataKey="value" fill="#f59e0b" radius={[0, 4, 4, 0]} />
               </BarChart>
@@ -174,7 +174,7 @@ function Analytics() {
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={toArr(data.top_areas).slice(0, 8)} layout="vertical">
                 <XAxis type="number" tick={{ fill: 'var(--clr-text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="name" tick={{ fill: 'var(--clr-text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} width={120} />
+                <YAxis type="category" dataKey="name" tick={{ fill: 'var(--clr-text-muted)', fontSize: 9 }} axisLine={false} tickLine={false} width={100} />
                 <Tooltip contentStyle={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: 8, color: 'var(--clr-text)' }} />
                 <Bar dataKey="value" fill="#ec4899" radius={[0, 4, 4, 0]} />
               </BarChart>
@@ -188,7 +188,7 @@ function Analytics() {
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={toArr(data.collision_types).slice(0, 6)} layout="vertical">
                 <XAxis type="number" tick={{ fill: 'var(--clr-text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="name" tick={{ fill: 'var(--clr-text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} width={140} />
+                <YAxis type="category" dataKey="name" tick={{ fill: 'var(--clr-text-muted)', fontSize: 9 }} axisLine={false} tickLine={false} width={120} />
                 <Tooltip contentStyle={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: 8, color: 'var(--clr-text)' }} />
                 <Bar dataKey="value" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
               </BarChart>
@@ -201,7 +201,7 @@ function Analytics() {
           <ChartCard title="Top Accident Causes" className="lg:col-span-2">
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={toArr(data.causes).slice(0, 10)}>
-                <XAxis dataKey="name" tick={{ fill: 'var(--clr-text-muted)', fontSize: 10, angle: -30 }} axisLine={false} tickLine={false} height={60} />
+                <XAxis dataKey="name" tick={{ fill: 'var(--clr-text-muted)', fontSize: 9, angle: -30 }} axisLine={false} tickLine={false} height={60} />
                 <YAxis tick={{ fill: 'var(--clr-text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: 8, color: 'var(--clr-text)' }} />
                 <Bar dataKey="value" fill="#14b8a6" radius={[4, 4, 0, 0]} />

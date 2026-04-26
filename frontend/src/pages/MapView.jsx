@@ -126,18 +126,18 @@ function MapView() {
   }, []);
 
   return (
-    <div className="space-y-4 h-full flex flex-col">
-      <div className="flex items-center justify-between">
+    <div className="space-y-3 md:space-y-4 h-full flex flex-col">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Hotspot Map</h2>
-          <p className="text-sm" style={{ color: 'var(--clr-text-muted)' }}>
+          <h2 className="text-lg md:text-xl font-bold" style={{ color: 'var(--clr-text)' }}>Hotspot Map</h2>
+          <p className="text-xs md:text-sm" style={{ color: 'var(--clr-text-muted)' }}>
             {filtered.length} clusters displayed
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {['All', ...TIERS].map(t => (
             <button key={t} onClick={() => handleFilterChange(t)}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+              className="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
               style={{
                 background: filter === t ? 'var(--clr-primary)' : 'var(--clr-surface)',
                 color: filter === t ? '#fff' : 'var(--clr-text-muted)',
@@ -149,13 +149,13 @@ function MapView() {
         </div>
       </div>
 
-      <div className="flex-1 rounded-xl overflow-hidden border" 
-        style={{ borderColor: 'var(--clr-border)', minHeight: 500 }}>
+      <div className="flex-1 rounded-xl overflow-hidden border w-full" 
+        style={{ borderColor: 'var(--clr-border)', minHeight: '400px', height: '100%' }}>
         <MapContainer 
           center={[20.5937, 78.9629]} 
           zoom={5} 
           className="h-full w-full"
-          style={{ height: '100%', minHeight: 500 }}
+          style={{ height: '100%', minHeight: '400px' }}
           preferCanvas={true}
           zoomControl={true}
           scrollWheelZoom={true}
@@ -179,13 +179,13 @@ function MapView() {
         </MapContainer>
       </div>
 
-      <div className="flex items-center gap-4 px-4 py-3 rounded-xl border"
+      <div className="flex flex-wrap items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 rounded-xl border"
         style={{ background: 'var(--clr-surface)', borderColor: 'var(--clr-border)' }}>
-        <span className="text-xs font-medium" style={{ color: 'var(--clr-text-muted)' }}>Risk Levels:</span>
+        <span className="text-xs font-medium whitespace-nowrap" style={{ color: 'var(--clr-text-muted)' }}>Risk Levels:</span>
         {TIERS.map(t => (
-          <div key={t} className="flex items-center gap-2 text-xs">
-            <span className="w-3 h-3 rounded-full" style={{ background: tierColor[t] }} />
-            <span style={{ color: 'var(--clr-text-muted)' }}>{t}</span>
+          <div key={t} className="flex items-center gap-1.5 sm:gap-2 text-xs">
+            <span className="w-3 h-3 rounded-full shrink-0" style={{ background: tierColor[t] }} />
+            <span className="whitespace-nowrap" style={{ color: 'var(--clr-text-muted)' }}>{t}</span>
           </div>
         ))}
       </div>
